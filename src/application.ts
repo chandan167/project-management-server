@@ -5,6 +5,7 @@ import { StatusCodes } from 'http-status-codes';
 import { environment } from './config/env';
 import { router } from './app/router/router';
 import { UserI } from './app/model/user.model';
+import { logger } from './utils/logger';
 
 
 declare global {
@@ -48,6 +49,8 @@ application.use((error: any, req: Request, res: Response, next: NextFunction) =>
 	if (environment.isDev || environment.isTest) {
 		return res.status(status).json({ message: message, stack: error.stack });
 	}
+
+	logger.error(error);
 
 	return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: 'Something went wrong' });
 });
